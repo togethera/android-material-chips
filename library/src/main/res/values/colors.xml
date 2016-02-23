@@ -15,5 +15,6 @@
     <color name="base30">#c1c1c1</color>
 
     <color name="dark_gray">#555555</color>
+    <color name="white">#FFFFFF</color>
 
 </resources>
