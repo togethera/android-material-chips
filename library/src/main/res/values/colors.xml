@@ -14,4 +14,6 @@
     <color name="base10">#eaeaea</color>
     <color name="base30">#c1c1c1</color>
 
+    <color name="dark_gray">#555555</color>
+
 </resources>

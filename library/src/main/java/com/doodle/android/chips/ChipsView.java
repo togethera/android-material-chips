@@ -48,6 +48,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.doodle.android.chips.dialog.ChipsEmailDialogFragment;
+import com.doodle.android.chips.dialog.ChipsPhoneDialogFragment;
 import com.doodle.android.chips.model.Contact;
 import com.doodle.android.chips.util.Common;
 import com.doodle.android.chips.views.ChipsEditText;
@@ -58,7 +59,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChipsView extends RelativeLayout implements ChipsEditText.InputConnectionWrapperInterface, ChipsEmailDialogFragment.EmailListener {
+public class ChipsView extends RelativeLayout implements ChipsEditText.InputConnectionWrapperInterface,
+        ChipsEmailDialogFragment.EmailListener, ChipsPhoneDialogFragment.PhonenumberListener {
 
     private static final String TAG = "ChipsView";
 
@@ -166,11 +168,11 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
 
             mChipsDialogTitle = a.getString(R.styleable.ChipsView_cv_dialog_title);
             if (TextUtils.isEmpty(mChipsDialogTitle)) {
-                mChipsDialogTitle = getResources().getString(R.string.chips_enter_email_address);
+                mChipsDialogTitle = getResources().getString(R.string.chips_enter_phonenumber);
             }
             mChipsDialogPlaceholder = a.getString(R.styleable.ChipsView_cv_dialog_et_placeholder);
             if (TextUtils.isEmpty(mChipsDialogPlaceholder)) {
-                mChipsDialogPlaceholder = getResources().getString(R.string.email);
+                mChipsDialogPlaceholder = getResources().getString(R.string.phonenumber);
             }
             mChipsDialogConfirm = a.getString(R.styleable.ChipsView_cv_dialog_confirm);
             if (TextUtils.isEmpty(mChipsDialogConfirm)) {
@@ -182,7 +184,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
             }
             mChipsDialogErrorMsg = a.getString(R.styleable.ChipsView_cv_dialog_error_msg);
             if (TextUtils.isEmpty(mChipsDialogErrorMsg)) {
-                mChipsDialogErrorMsg = getResources().getString(R.string.please_enter_a_valid_email_address);
+                mChipsDialogErrorMsg = getResources().getString(R.string.please_enter_a_valid_phonenumber);
             }
 
 
@@ -204,10 +206,11 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         addView(linearLayout);
 
         mEditText = new ChipsEditText(getContext(), this);
+        mEditText.setTextColor(getContext().getResources().getColor(R.color.dark_gray));
         mEditText.setBackgroundColor(Color.argb(0, 0, 0, 0));
         mEditText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_ACTION_UNSPECIFIED);
-        mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_PHONE | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         //mEditText.setHint(R.string.name_or_email_address);
 
         addView(mEditText);
@@ -274,8 +277,8 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
     public Contact tryToRecognizeAddress() {
         String text = mEditText.getText().toString();
         if (!TextUtils.isEmpty(text)) {
-            if (Common.isValidEmail(text)) {
-                return new Contact(text, "", null, text, null);
+            if (Common.isValidPhonenumber(text)) {
+                return new Contact(text, "", null, text, "", null);
             }
         }
         return null;
@@ -331,20 +334,39 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
     private void onEnterPressed(String text) {
         if (text != null && text.length() > 0) {
 
-            if (Common.isValidEmail(text)) {
-                onEmailRecognized(text);
+            if (Common.isValidPhonenumber(text)) {
+                onPhonenumberRecognized(text);
             } else {
-                onNonEmailRecognized(text);
+                onNonPhonenumberRecognized(text);
             }
             mEditText.setSelection(0);
         }
     }
 
     private void onEmailRecognized(String email) {
-        onEmailRecognized(new Contact(email, "", null, email, null));
+        onEmailRecognized(new Contact(email, "", null, "", email, null));
+    }
+
+
+    private void onPhonenumberRecognized(String phonenumber) {
+        onPhonenumberRecognized(new Contact(phonenumber, "", null, phonenumber, "", null));
     }
 
     private void onEmailRecognized(Contact contact) {
+        Chip chip = new Chip(contact.getDisplayName(), null, contact);
+        mChipList.add(chip);
+        if (mChipsListener != null) {
+            mChipsListener.onChipAdded(chip);
+        }
+        post(new Runnable() {
+            @Override
+            public void run() {
+                onChipsChanged(true);
+            }
+        });
+    }
+
+    private void onPhonenumberRecognized(Contact contact) {
         Chip chip = new Chip(contact.getDisplayName(), null, contact);
         mChipList.add(chip);
         if (mChipsListener != null) {
@@ -379,6 +401,27 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         }
     }
 
+    private void onNonPhonenumberRecognized(String text) {
+        try {
+            FragmentManager fragmentManager = ((FragmentActivity) getContext()).getSupportFragmentManager();
+
+            Bundle bundle = new Bundle();
+            bundle.putString(ChipsPhoneDialogFragment.EXTRA_STRING_TEXT, text);
+            bundle.putString(ChipsPhoneDialogFragment.EXTRA_STRING_TITLE, mChipsDialogTitle);
+            bundle.putString(ChipsPhoneDialogFragment.EXTRA_STRING_PLACEHOLDER, mChipsDialogPlaceholder);
+            bundle.putString(ChipsPhoneDialogFragment.EXTRA_STRING_CONFIRM, mChipsDialogConfirm);
+            bundle.putString(ChipsPhoneDialogFragment.EXTRA_STRING_CANCEL, mChipsDialogCancel);
+            bundle.putString(ChipsPhoneDialogFragment.EXTRA_STRING_ERROR_MSG, mChipsDialogErrorMsg);
+
+            ChipsPhoneDialogFragment chipsPhoneDialogFragment = new ChipsPhoneDialogFragment();
+            chipsPhoneDialogFragment.setArguments(bundle);
+            chipsPhoneDialogFragment.setPhonenumberListener(this);
+            chipsPhoneDialogFragment.show(fragmentManager, ChipsPhoneDialogFragment.class.getSimpleName());
+        } catch (ClassCastException e) {
+            Log.e(TAG, "Error ClassCast", e);
+        }
+    }
+
     private void selectOrDeleteLastChip() {
         if (mChipList.size() > 0) {
             onChipInteraction(mChipList.size() - 1);
@@ -405,7 +448,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
             }
             onChipsChanged(true);
             if (nameClicked) {
-                mEditText.setText(chip.getContact().getEmailAddress());
+                mEditText.setText(chip.getContact().getPhonenumber());
                 addLeadingMarginSpan();
                 mEditText.requestFocus();
                 mEditText.setSelection(mEditText.length());
@@ -436,7 +479,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
 
     @Override
     public void onDialogEmailEntered(String email, String initialText) {
-        onEmailRecognized(new Contact(initialText, "", initialText, email, null));
+        onEmailRecognized(new Contact(initialText, "", initialText, "", email, null));
     }
 
     /**
@@ -444,6 +487,11 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
      */
     public void setChipsValidator(ChipValidator mChipsValidator) {
         this.mChipsValidator = mChipsValidator;
+    }
+
+    @Override
+    public void onDialogPhonenumberEntered(String phonenumber, String initialText) {
+        onPhonenumberRecognized(new Contact(initialText, "", initialText, phonenumber, "", null));
     }
 
     public EditText getEditText() {
@@ -567,7 +615,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
             this.mIsIndelible = isIndelible;
 
             if (mLabel == null) {
-                mLabel = contact.getEmailAddress();
+                mLabel = contact.getPhonenumber();
             }
 
             if (mLabel.length() > MAX_LABEL_LENGTH) {
