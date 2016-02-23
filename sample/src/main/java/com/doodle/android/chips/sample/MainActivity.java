@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         mChipsView.setChipsValidator(new ChipsView.ChipValidator() {
             @Override
             public boolean isValid(Contact contact) {
-                if (contact.getDisplayName().equals("asd@qwe.de")) {
+                if (contact.getDisplayName().equals("07901020304")) {
                     return false;
                 }
                 return true;
@@ -83,13 +83,13 @@ public class MainActivity extends AppCompatActivity {
     public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         private String[] data = new String[]{
-                "john@doe.com",
-                "at@doodle.com",
-                "asd@qwe.de",
-                "verylongaddress@verylongserver.com",
-                "thisIsMyEmail@address.com",
-                "test@testeration.de",
-                "short@short.com"
+                "07930353540",
+                "07911223344",
+                "07977445826",
+                "07742211229",
+                "07874854612",
+                "07799099621",
+                "07924045211"
         };
 
         private List<String> filteredList = new ArrayList<>();
@@ -147,14 +147,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            String email = textView.getText().toString();
-            Uri imgUrl = Math.random() > .7d ? null : Uri.parse("https://robohash.org/" + Math.abs(email.hashCode()));
-            Contact contact = new Contact(null, null, null, email, imgUrl);
+            String phone = textView.getText().toString();
+            Uri imgUrl = Math.random() > .7d ? null : Uri.parse("https://robohash.org/" + Math.abs(phone.hashCode()));
+            Contact contact = new Contact(null, null, null, phone, "", imgUrl);
 
             if (checkBox.isChecked()) {
                 mChipsView.removeChipBy(contact);
             } else {
-                mChipsView.addChip(email, imgUrl, contact);
+                mChipsView.addChip(phone, imgUrl, contact);
             }
             checkBox.toggle();
         }
