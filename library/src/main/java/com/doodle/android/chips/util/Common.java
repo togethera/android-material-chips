@@ -17,10 +17,16 @@
 package com.doodle.android.chips.util;
 
 import android.text.TextUtils;
+import android.util.Patterns;
 
 public class Common {
 
     public static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
+
+    public static boolean isValidPhonenumber(CharSequence target) {
+        return !TextUtils.isEmpty(target) && Patterns.PHONE.matcher(target).matches();
+    }
+
 }
