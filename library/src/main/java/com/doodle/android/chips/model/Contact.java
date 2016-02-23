@@ -34,6 +34,9 @@ public class Contact implements Comparable<Contact>, Serializable {
     @NonNull
     private final String mEmailAddress;
 
+    @NonNull
+    private final String mPhonenumber;
+
     @Nullable
     private transient final Uri mAvatarUri;
 
@@ -43,17 +46,22 @@ public class Contact implements Comparable<Contact>, Serializable {
     @NonNull
     private final String mInitials;
 
-    public Contact(@Nullable String firstName, @Nullable String lastName, @Nullable String displayName, @NonNull String emailAddress, @Nullable Uri avatarUri) {
+    public Contact(@Nullable String firstName, @Nullable String lastName, @Nullable String displayName, @NonNull String phonenumber, @NonNull String emailAddress, @Nullable Uri avatarUri) {
         mFirstName = firstName;
         mLastName = lastName;
         mAvatarUri = avatarUri;
+        mPhonenumber = phonenumber;
         mEmailAddress = emailAddress;
 
         if (!TextUtils.isEmpty(displayName)) {
             mDisplayName = displayName;
         } else if (TextUtils.isEmpty(mFirstName)) {
             if (TextUtils.isEmpty(mLastName)) {
-                mDisplayName = mEmailAddress;
+                if (TextUtils.isEmpty(mEmailAddress)) {
+                    mDisplayName = mPhonenumber;
+                } else {
+                    mDisplayName = mEmailAddress;
+                }
             } else {
                 mDisplayName = mLastName;
             }
@@ -86,6 +94,11 @@ public class Contact implements Comparable<Contact>, Serializable {
     @NonNull
     public String getEmailAddress() {
         return mEmailAddress;
+    }
+
+    @NonNull
+    public String getPhonenumber() {
+        return mPhonenumber;
     }
 
     @Nullable
@@ -149,7 +162,7 @@ public class Contact implements Comparable<Contact>, Serializable {
             }
         }
 
-        return mEmailAddress.compareTo(another.mEmailAddress);
+        return mPhonenumber.compareTo(another.mPhonenumber);
     }
 
     private int compare(String myString, String otherString) {
@@ -171,7 +184,8 @@ public class Contact implements Comparable<Contact>, Serializable {
         String lowerCaseSearchString = searchString.toString().toLowerCase();
         return (mFirstName != null && mFirstName.toLowerCase().contains(lowerCaseSearchString)) ||
                 (mLastName != null && mLastName.toLowerCase().contains(lowerCaseSearchString)) ||
-                mEmailAddress.toLowerCase().contains(lowerCaseSearchString);
+                mEmailAddress.toLowerCase().contains(lowerCaseSearchString) ||
+                mPhonenumber.toLowerCase().contains(lowerCaseSearchString);
     }
 
 
@@ -184,12 +198,14 @@ public class Contact implements Comparable<Contact>, Serializable {
 
         if (!mEmailAddress.equals(contact.mEmailAddress)) return false;
 
+        if (!mPhonenumber.equals(contact.mPhonenumber)) return false;
+
         return true;
     }
 
     @Override
     public int hashCode() {
-        return mEmailAddress.hashCode();
+        return mPhonenumber.hashCode();
     }
 
     @Override
@@ -197,6 +213,7 @@ public class Contact implements Comparable<Contact>, Serializable {
         return "Contact{" +
                 "mFirstName='" + mFirstName + '\'' +
                 ", mLastName='" + mLastName + '\'' +
+                ", mPhonenumber='" + mPhonenumber + '\'' +
                 ", mEmailAddress='" + mEmailAddress + '\'' +
                 ", mAvatarUri=" + mAvatarUri +
                 ", mDisplayName='" + mDisplayName + '\'' +
