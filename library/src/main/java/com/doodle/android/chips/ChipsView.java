@@ -278,7 +278,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         String text = mEditText.getText().toString();
         if (!TextUtils.isEmpty(text)) {
             if (Common.isValidPhonenumber(text)) {
-                return new Contact(text, "", null, text, "", null);
+                return new Contact("", text, "", null, text, "", null);
             }
         }
         return null;
@@ -344,12 +344,12 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
     }
 
     private void onEmailRecognized(String email) {
-        onEmailRecognized(new Contact(email, "", null, "", email, null));
+        onEmailRecognized(new Contact("", email, "", null, "", email, null));
     }
 
 
     private void onPhonenumberRecognized(String phonenumber) {
-        onPhonenumberRecognized(new Contact(phonenumber, "", null, phonenumber, "", null));
+        onPhonenumberRecognized(new Contact("", phonenumber, "", null, phonenumber, "", null));
     }
 
     private void onEmailRecognized(Contact contact) {
@@ -479,7 +479,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
 
     @Override
     public void onDialogEmailEntered(String email, String initialText) {
-        onEmailRecognized(new Contact(initialText, "", initialText, "", email, null));
+        onEmailRecognized(new Contact("", initialText, "", initialText, "", email, null));
     }
 
     /**
@@ -491,7 +491,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
 
     @Override
     public void onDialogPhonenumberEntered(String phonenumber, String initialText) {
-        onPhonenumberRecognized(new Contact(initialText, "", initialText, phonenumber, "", null));
+        onPhonenumberRecognized(new Contact("", initialText, "", initialText, phonenumber, "", null));
     }
 
     public EditText getEditText() {
