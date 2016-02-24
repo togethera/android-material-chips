@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             String phone = textView.getText().toString();
             Uri imgUrl = Math.random() > .7d ? null : Uri.parse("https://robohash.org/" + Math.abs(phone.hashCode()));
-            Contact contact = new Contact(null, null, null, phone, "", imgUrl);
+            Contact contact = new Contact("", null, null, null, phone, "", imgUrl);
 
             if (checkBox.isChecked()) {
                 mChipsView.removeChipBy(contact);

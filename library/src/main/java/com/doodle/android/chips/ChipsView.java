@@ -18,6 +18,7 @@ package com.doodle.android.chips;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -35,6 +36,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,11 +52,13 @@ import android.widget.TextView;
 import com.doodle.android.chips.dialog.ChipsEmailDialogFragment;
 import com.doodle.android.chips.dialog.ChipsPhoneDialogFragment;
 import com.doodle.android.chips.model.Contact;
+import com.doodle.android.chips.util.ColorGenerator;
 import com.doodle.android.chips.util.Common;
 import com.doodle.android.chips.views.ChipsEditText;
 import com.doodle.android.chips.views.ChipsVerticalLinearLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.subinkrishna.widget.CircularImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -213,6 +217,10 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         //mEditText.setHint(R.string.name_or_email_address);
 
+        Resources r = getResources();
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
+        mEditText.setPadding(px, px, px, 0);
+        mEditText.setLineSpacing(0.0f, 1.25f);
         addView(mEditText);
 
         mRootChipsLayout = new ChipsVerticalLinearLayout(getContext());
@@ -596,7 +604,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         private View mIconWrapper;
         private TextView mTextView;
 
-        private ImageView mAvatarView;
+        private CircularImageView mAvatarView;
         private ImageView mPersonIcon;
         private ImageView mCloseIcon;
 
@@ -627,7 +635,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
             if (mView == null) {
                 mView = (RelativeLayout) inflate(getContext(), R.layout.chips_view, null);
                 mView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) (32 * mDensity)));
-                mAvatarView = (ImageView) mView.findViewById(R.id.ri_ch_avatar);
+                mAvatarView = (CircularImageView) mView.findViewById(R.id.ri_ch_avatar);
                 mIconWrapper = mView.findViewById(R.id.rl_ch_avatar);
                 mTextView = (TextView) mView.findViewById(R.id.tv_ch_name);
                 mPersonIcon = (ImageView) mView.findViewById(R.id.iv_ch_person);
@@ -660,6 +668,12 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
 
         private void updateViews() {
             mTextView.setText(mLabel);
+            mAvatarView.allowCheckStateAnimation(false);
+
+            mAvatarView.setPlaceholder(String.valueOf(mContact.getDisplayName().charAt(0)),
+                    ColorGenerator.MATERIAL.getColor(mContact.getPhonenumber()),
+                    Color.WHITE);
+
             if (mPhotoUri != null) {
                 Picasso.with(getContext())
                         .load(mPhotoUri)
