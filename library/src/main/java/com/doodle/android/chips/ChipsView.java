@@ -215,7 +215,8 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         mEditText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_ACTION_UNSPECIFIED);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        mEditText.setHint(R.string.please_enter_a_valid_phonenumber);
+        mEditText.setHint(R.string.input_placeholder);
+        mEditText.setHintTextColor(getResources().getColor(R.color.base30));
         //mEditText.setHint(R.string.name_or_email_address);
 
         Resources r = getResources();
