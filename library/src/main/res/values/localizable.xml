@@ -4,6 +4,7 @@
     <string name="chips_enter_phonenumber">Please enter a valid phonenumber for this person</string>
     <string name="please_enter_a_valid_email_address">Please enter a valid e-mail address.</string>
     <string name="please_enter_a_valid_phonenumber">Please enter a valid phonenumber.</string>
+    <string name="input_placeholder">Search for contacts</string>
     <string name="email">E-mail</string>
     <string name="phonenumber">Phonenumber</string>
     <string name="confirm">Confirm</string>
