@@ -18,6 +18,7 @@ package com.doodle.android.chips;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -35,6 +36,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -215,6 +217,10 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         //mEditText.setHint(R.string.name_or_email_address);
 
+        Resources r = getResources();
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
+        mEditText.setPadding(px, px, px, 0);
+        mEditText.setLineSpacing(0.0f, 1.25f);
         addView(mEditText);
 
         mRootChipsLayout = new ChipsVerticalLinearLayout(getContext());

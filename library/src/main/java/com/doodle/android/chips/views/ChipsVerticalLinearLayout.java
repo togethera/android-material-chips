@@ -17,6 +17,8 @@
 package com.doodle.android.chips.views;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -57,6 +59,13 @@ public class ChipsVerticalLinearLayout extends LinearLayout {
 
         for (ChipsView.Chip chip : chips) {
             View view = chip.getView();
+
+            Resources r = getResources();
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
+            MarginLayoutParams mlp = (MarginLayoutParams) view.getLayoutParams();
+            mlp.setMargins(0, 0, px, px);
+            view.setLayoutParams(mlp);
+
             view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 
             // if width exceed current width. create a new LinearLayout
