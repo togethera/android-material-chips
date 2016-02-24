@@ -210,7 +210,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         mEditText.setBackgroundColor(Color.argb(0, 0, 0, 0));
         mEditText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_ACTION_UNSPECIFIED);
-        mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_PHONE | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         //mEditText.setHint(R.string.name_or_email_address);
 
         addView(mEditText);
@@ -278,7 +278,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         String text = mEditText.getText().toString();
         if (!TextUtils.isEmpty(text)) {
             if (Common.isValidPhonenumber(text)) {
-                return new Contact(text, "", null, text, "", null);
+                return new Contact("", text, "", null, text, "", null);
             }
         }
         return null;
@@ -344,12 +344,12 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
     }
 
     private void onEmailRecognized(String email) {
-        onEmailRecognized(new Contact(email, "", null, "", email, null));
+        onEmailRecognized(new Contact("", email, "", null, "", email, null));
     }
 
 
     private void onPhonenumberRecognized(String phonenumber) {
-        onPhonenumberRecognized(new Contact(phonenumber, "", null, phonenumber, "", null));
+        onPhonenumberRecognized(new Contact("", phonenumber, "", null, phonenumber, "", null));
     }
 
     private void onEmailRecognized(Contact contact) {
@@ -479,7 +479,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
 
     @Override
     public void onDialogEmailEntered(String email, String initialText) {
-        onEmailRecognized(new Contact(initialText, "", initialText, "", email, null));
+        onEmailRecognized(new Contact("", initialText, "", initialText, "", email, null));
     }
 
     /**
@@ -491,7 +491,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
 
     @Override
     public void onDialogPhonenumberEntered(String phonenumber, String initialText) {
-        onPhonenumberRecognized(new Contact(initialText, "", initialText, phonenumber, "", null));
+        onPhonenumberRecognized(new Contact("", initialText, "", initialText, phonenumber, "", null));
     }
 
     public EditText getEditText() {
