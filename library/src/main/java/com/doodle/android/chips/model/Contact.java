@@ -46,7 +46,10 @@ public class Contact implements Comparable<Contact>, Serializable {
     @NonNull
     private final String mInitials;
 
-    public Contact(@Nullable String firstName, @Nullable String lastName, @Nullable String displayName, @NonNull String phonenumber, @NonNull String emailAddress, @Nullable Uri avatarUri) {
+    private final String mId;
+
+    public Contact(String id, @Nullable String firstName, @Nullable String lastName, @Nullable String displayName, @NonNull String phonenumber, @NonNull String emailAddress, @Nullable Uri avatarUri) {
+        mId = id;
         mFirstName = firstName;
         mLastName = lastName;
         mAvatarUri = avatarUri;
@@ -79,6 +82,11 @@ public class Contact implements Comparable<Contact>, Serializable {
             initialsBuilder.append(Character.toUpperCase(mLastName.charAt(0)));
         }
         mInitials = initialsBuilder.toString();
+    }
+
+    @NonNull
+    public String getId() {
+        return mId;
     }
 
     @NonNull
@@ -211,7 +219,8 @@ public class Contact implements Comparable<Contact>, Serializable {
     @Override
     public String toString() {
         return "Contact{" +
-                "mFirstName='" + mFirstName + '\'' +
+                "mId='" + mId + '\'' +
+                ", mFirstName='" + mFirstName + '\'' +
                 ", mLastName='" + mLastName + '\'' +
                 ", mPhonenumber='" + mPhonenumber + '\'' +
                 ", mEmailAddress='" + mEmailAddress + '\'' +
