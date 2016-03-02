@@ -206,6 +206,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         mEditText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_ACTION_UNSPECIFIED);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        mEditText.setSingleLine(true);
         mEditText.setHint(R.string.input_placeholder);
         mEditText.setHintTextColor(getResources().getColor(R.color.base30));
         mEditText.requestFocus();
@@ -347,8 +348,8 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
             } else {
                 onNonPhonenumberRecognized(text);
             }
-            mEditText.setSelection(0);
         }*/
+        mEditText.setSelection(0);
     }
 
     private void onEmailRecognized(String email) {
@@ -530,7 +531,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
 
             } else {
                 // no paste text change
-                if (s.toString().contains("\n")) {
+                /*if (s.toString().contains("\n")) {
                     String text = s.toString();
                     text = text.replace("\n", "");
                     while (text.contains("  ")) {
@@ -542,7 +543,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
                     } else {
                         s.append(text);
                     }
-                }
+                }*/
             }
             if (mChipsListener != null) {
                 mChipsListener.onTextChanged(s);
@@ -576,7 +577,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
                 }
             }
             if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                mEditText.append("\n");
+                //mEditText.append("\n");
                 return true;
             }
 
