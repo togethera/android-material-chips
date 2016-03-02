@@ -69,7 +69,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
     private static final String TAG = "ChipsView";
 
     private static final int CHIP_HEIGHT = 33;
-    private static final int TEXT_EXTRA_TOP_MARGIN = 4;
+    private static final int TEXT_EXTRA_TOP_MARGIN = 8;
     public static final int CHIP_BOTTOM_PADDING = 1;
 
     // RES --------------------------------------------------
@@ -200,15 +200,6 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
     private void init() {
         mDensity = getResources().getDisplayMetrics().density;
 
-        // Dummy item to prevent AutoCompleteTextView from receiving focus
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(0, 0);
-        linearLayout.setLayoutParams(params);
-        linearLayout.setFocusable(true);
-        linearLayout.setFocusableInTouchMode(true);
-
-        addView(linearLayout);
-
         mEditText = new ChipsEditText(getContext(), this);
         mEditText.setTextColor(getContext().getResources().getColor(R.color.dark_gray));
         mEditText.setBackgroundColor(Color.argb(0, 0, 0, 0));
@@ -217,12 +208,12 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEditText.setHint(R.string.input_placeholder);
         mEditText.setHintTextColor(getResources().getColor(R.color.base30));
-        //mEditText.setHint(R.string.name_or_email_address);
+        mEditText.requestFocus();
 
         Resources r = getResources();
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
         mEditText.setPadding(px, px, px, 0);
-        mEditText.setLineSpacing(0.0f, 1.25f);
+        //mEditText.setLineSpacing(1.0f, 1.0f);
         addView(mEditText);
 
         mRootChipsLayout = new ChipsVerticalLinearLayout(getContext());
@@ -300,6 +291,13 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
     private void onChipsChanged(final boolean moveCursor) {
         ChipsVerticalLinearLayout.TextLineParams textLineParams = mRootChipsLayout.onChipsChanged(mChipList);
 
+        // Show/Hide EditText hint depending on chip count
+        if (getChipCount() == 0) {
+            mEditText.setHint(R.string.input_placeholder);
+        } else if (getChipCount() == 1) {
+            mEditText.setHint("");
+        }
+
         // if null then run another layout pass
         if (textLineParams == null) {
             post(new Runnable() {
@@ -312,7 +310,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         }
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.topMargin = (int) (textLineParams.row * CHIP_HEIGHT * mDensity + TEXT_EXTRA_TOP_MARGIN * mDensity);
+        params.topMargin = (int) (textLineParams.row * (CHIP_HEIGHT * mDensity) + textLineParams.row * (TEXT_EXTRA_TOP_MARGIN * mDensity));
         mEditText.setLayoutParams(params);
         addLeadingMarginSpan(textLineParams.lineMargin);
         if (moveCursor) {
@@ -342,7 +340,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
     }
 
     private void onEnterPressed(String text) {
-        if (text != null && text.length() > 0) {
+        /*if (text != null && text.length() > 0) {
 
             if (Common.isValidPhonenumber(text)) {
                 onPhonenumberRecognized(text);
@@ -350,7 +348,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
                 onNonPhonenumberRecognized(text);
             }
             mEditText.setSelection(0);
-        }
+        }*/
     }
 
     private void onEmailRecognized(String email) {
@@ -457,12 +455,13 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
                 mChipsListener.onChipDeleted(chip);
             }
             onChipsChanged(true);
+            /* Disable replacing deleted chip with phone number
             if (nameClicked) {
                 mEditText.setText(chip.getContact().getPhonenumber());
                 addLeadingMarginSpan();
                 mEditText.requestFocus();
                 mEditText.setSelection(mEditText.length());
-            }
+            }*/
         } else {
             chip.setSelected(true);
             onChipsChanged(false);
@@ -549,6 +548,10 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
                 mChipsListener.onTextChanged(s);
             }
         }
+    }
+
+    public int getChipCount() {
+        return mChipList != null ? mChipList.size() : 0;
     }
 
     private class KeyInterceptingInputConnection extends InputConnectionWrapper {
