@@ -75,7 +75,8 @@ public class ChipsVerticalLinearLayout extends LinearLayout {
                 ll = createHorizontalView();
             }
 
-            widthSum += view.getMeasuredWidth();
+            int extraMargin = ll.getChildCount() > 0 ? px8 : 0;
+            widthSum = widthSum + view.getMeasuredWidth() + extraMargin;
             ll.addView(view);
         }
 
