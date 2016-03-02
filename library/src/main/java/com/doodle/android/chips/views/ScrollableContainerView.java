@@ -20,7 +20,7 @@ public class ScrollableContainerView extends ScrollView {
 
     @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         float density = getResources().getDisplayMetrics().density;
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec((int) (150*density), MeasureSpec.AT_MOST);
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec((int) (110*density), MeasureSpec.AT_MOST);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
