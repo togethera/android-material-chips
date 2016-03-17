@@ -212,8 +212,9 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         mEditText.requestFocus();
 
         Resources r = getResources();
-        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
-        mEditText.setPadding(px, px, px, 0);
+        int px8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
+        int px12 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, r.getDisplayMetrics());
+        mEditText.setPadding(px8, px12, px8, 0);
         //mEditText.setLineSpacing(1.0f, 1.0f);
         addView(mEditText);
 
@@ -239,7 +240,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    unSelectChipsExcept(null);
+                    //unSelectChipsExcept(null);
                 }
             }
         });
@@ -311,7 +312,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         }
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.topMargin = (int) (textLineParams.row * (CHIP_HEIGHT * mDensity) + textLineParams.row * (TEXT_EXTRA_TOP_MARGIN * mDensity));
+        params.topMargin = (int) ((textLineParams.row * ((CHIP_HEIGHT * mDensity)) + (textLineParams.row * (TEXT_EXTRA_TOP_MARGIN * mDensity))));
         mEditText.setLayoutParams(params);
         addLeadingMarginSpan(textLineParams.lineMargin);
         if (moveCursor) {

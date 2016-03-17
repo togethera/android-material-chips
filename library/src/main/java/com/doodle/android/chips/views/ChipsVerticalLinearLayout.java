@@ -63,7 +63,7 @@ public class ChipsVerticalLinearLayout extends LinearLayout {
             Resources r = getResources();
             int px8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
             MarginLayoutParams mlp = (MarginLayoutParams) view.getLayoutParams();
-            mlp.setMargins(0, 0, px8, px8);
+            mlp.setMargins(0, 0, px8, 0);
             view.setLayoutParams(mlp);
 
             view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
@@ -93,10 +93,10 @@ public class ChipsVerticalLinearLayout extends LinearLayout {
 
     private LinearLayout createHorizontalView() {
         Resources r = getResources();
+        int px4 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, r.getDisplayMetrics());
         int px8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
-        int px16 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
         LinearLayout ll = new LinearLayout(getContext());
-        ll.setPadding(px16, 0, 0, (int) (ChipsView.CHIP_BOTTOM_PADDING * mDensity));
+        ll.setPadding(0, px8, 0, (int) (ChipsView.CHIP_BOTTOM_PADDING * mDensity));
         ll.setOrientation(HORIZONTAL);
         addView(ll);
         mLineLayouts.add(ll);
