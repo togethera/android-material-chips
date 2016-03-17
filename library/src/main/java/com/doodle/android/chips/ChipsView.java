@@ -18,7 +18,6 @@ package com.doodle.android.chips;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -36,7 +35,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -211,10 +209,11 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         mEditText.setHintTextColor(getResources().getColor(R.color.base30));
         mEditText.requestFocus();
 
-        Resources r = getResources();
-        int px8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
-        int px12 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, r.getDisplayMetrics());
-        mEditText.setPadding(px8, px12, px8, px12);
+        int l = getChipCount() == 0 ? (int) (8 * mDensity) : (int) (8 * mDensity);
+        int t = (int) (12*mDensity);
+        int r = (int) (8*mDensity);
+        int b = (int) (12*mDensity);
+        mEditText.setPadding(l*2, t, r, b);
         //mEditText.setLineSpacing(1.0f, 1.0f);
         addView(mEditText);
 
@@ -313,6 +312,11 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.topMargin = (int) ((textLineParams.row * ((CHIP_HEIGHT * mDensity)) + (textLineParams.row * (TEXT_EXTRA_TOP_MARGIN * mDensity))));
+        int l = getChipCount() == 0 ? (int) (8 * mDensity) : (int) (8 * mDensity);
+        int t = (int) (12*mDensity);
+        int r = (int) (8*mDensity);
+        int b = (int) (12*mDensity);
+        mEditText.setPadding(l*2, t, r, b);
         mEditText.setLayoutParams(params);
         addLeadingMarginSpan(textLineParams.lineMargin);
         if (moveCursor) {
