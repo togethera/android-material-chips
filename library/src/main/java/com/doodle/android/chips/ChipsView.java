@@ -214,7 +214,7 @@ public class ChipsView extends RelativeLayout implements ChipsEditText.InputConn
         Resources r = getResources();
         int px8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
         int px12 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, r.getDisplayMetrics());
-        mEditText.setPadding(px8, px12, px8, 0);
+        mEditText.setPadding(px8, px12, px8, px12);
         //mEditText.setLineSpacing(1.0f, 1.0f);
         addView(mEditText);
 
