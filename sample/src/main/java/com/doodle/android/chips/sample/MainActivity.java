@@ -87,12 +87,12 @@ public class MainActivity extends AppCompatActivity {
 
         private String[] data = new String[]{
                 "07930353540",
-                "07911223344",
-                "07977445826",
-                "07742211229",
+                "John",
+                "Zoe",
+                "Paul Whitby",
                 "07874854612",
-                "07799099621",
-                "07924045211"
+                "Thomas",
+                "Red"
         };
 
         private List<String> filteredList = new ArrayList<>();

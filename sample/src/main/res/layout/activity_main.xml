@@ -23,10 +23,14 @@
             android:layout_marginRight="8dp"
             android:text="to:"/>
 
+        <com.doodle.android.chips.views.ScrollableContainerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <com.doodle.android.chips.ChipsView
             android:id="@+id/chipsView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        </com.doodle.android.chips.views.ScrollableContainerView>
 
         <!--
             customize with: .. xmlns:app="http://schemas.android.com/apk/res-auto" ..
@@ -45,7 +49,6 @@
             -->
 
     </LinearLayout>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
